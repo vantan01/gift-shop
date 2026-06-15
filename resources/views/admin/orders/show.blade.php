@@ -89,8 +89,7 @@
         <div class="bg-white rounded-2xl border border-gray-100 p-5">
             <h2 class="font-semibold text-gray-700 mb-3">Trạng thái hiện tại</h2>
             <span class="inline-block text-sm font-semibold px-3 py-1.5 rounded-full
-                         bg-{{ $order->status->color() }}-100
-                         text-{{ $order->status->color() }}-700">
+                         {{ $order->status->badgeClasses() }}">
                 {{ $order->status->label() }}
             </span>
         </div>

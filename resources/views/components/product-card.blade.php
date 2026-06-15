@@ -9,7 +9,7 @@
         {{-- Product Image --}}
         <div class="relative aspect-square bg-pink-50 overflow-hidden">
             @if ($product->image)
-                <img src="{{ $product->image }}"
+                <img src="{{ Str::startsWith($product->image, 'http') ? $product->image : Storage::url($product->image) }}"
                      alt="{{ $product->name }}"
                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
             @else

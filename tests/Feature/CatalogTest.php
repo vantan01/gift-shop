@@ -97,4 +97,30 @@ describe('Product Catalog', function () {
         $this->get('/products/does-not-exist')->assertNotFound();
     });
 
+    it('shows category page with products', function () {
+        $category = Category::factory()->create([
+            'slug'      => 'thu-bong',
+            'is_active' => true,
+        ]);
+
+        Product::factory()->count(2)->create([
+            'category_id' => $category->id,
+            'is_active'   => true,
+        ]);
+
+        $this->get('/categories/thu-bong')
+             ->assertOk()
+             ->assertViewIs('pages.categories.show')
+             ->assertViewHas('category', fn ($c) => $c->slug === 'thu-bong');
+    });
+
+    it('returns 404 for inactive category', function () {
+        $category = Category::factory()->create([
+            'slug'      => 'hidden-cat',
+            'is_active' => false,
+        ]);
+
+        $this->get('/categories/hidden-cat')->assertNotFound();
+    });
+
 });

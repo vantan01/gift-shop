@@ -35,6 +35,18 @@ enum OrderStatus: string
         };
     }
 
+    public function badgeClasses(): string
+    {
+        return match ($this) {
+            self::PENDING   => 'bg-yellow-100 text-yellow-700',
+            self::PAID      => 'bg-blue-100 text-blue-700',
+            self::PACKING   => 'bg-purple-100 text-purple-700',
+            self::SHIPPED   => 'bg-indigo-100 text-indigo-700',
+            self::DELIVERED => 'bg-emerald-100 text-emerald-700',
+            self::CANCELLED => 'bg-red-100 text-red-700',
+        };
+    }
+
     // User chỉ được hủy khi ở 2 trạng thái này
     public function isCancellable(): bool
     {

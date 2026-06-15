@@ -35,6 +35,37 @@ class CategoryController extends Controller
         return back()->with('success', 'Thêm danh mục thành công!');
     }
 
+    public function edit(Category $category)
+    {
+        return view('admin.categories.edit', compact('category'));
+    }
+
+    public function update(Request $request, Category $category)
+    {
+        $data = $request->validate([
+            'name'        => ['required', 'string', 'max:100'],
+            'description' => ['nullable', 'string', 'max:500'],
+            'sort_order'  => ['integer', 'min:0'],
+        ]);
+
+        $category->update([
+            ...$data,
+            'slug' => Str::slug($data['name']),
+        ]);
+
+        return redirect()->route('admin.categories.index')->with('success', 'Cập nhật danh mục thành công!');
+    }
+
+    public function destroy(Category $category)
+    {
+        if ($category->products()->count() > 0) {
+            return back()->with('error', 'Không thể xoá danh mục đang có sản phẩm.');
+        }
+
+        $category->delete();
+        return back()->with('success', 'Đã xoá danh mục thành công.');
+    }
+
     public function toggleActive(Category $category)
     {
         $category->update(['is_active' => ! $category->is_active]);

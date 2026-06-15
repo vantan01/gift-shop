@@ -23,6 +23,8 @@ class StoreProductRequest extends FormRequest
             'low_stock_threshold' => ['required', 'integer', 'min:1', 'max:100'],
             'is_active'           => ['boolean'],
             'is_featured'         => ['boolean'],
+            'image'               => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
+            'images.*'            => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
         ];
     }
 

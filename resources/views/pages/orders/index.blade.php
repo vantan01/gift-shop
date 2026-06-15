@@ -41,8 +41,7 @@
                         </div>
                         <div class="text-right flex-shrink-0">
                             <span class="inline-block text-xs font-semibold px-3 py-1 rounded-full
-                                         bg-{{ $order->status->color() }}-100
-                                         text-{{ $order->status->color() }}-700">
+                                         {{ $order->status->badgeClasses() }}">
                                 {{ $order->status->label() }}
                             </span>
                             <p class="text-base font-bold text-pink-600 mt-1">

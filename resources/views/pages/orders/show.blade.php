@@ -27,7 +27,7 @@
             </p>
         </div>
         <span class="inline-block text-sm font-semibold px-4 py-1.5 rounded-full flex-shrink-0
-                     bg-{{ $order->status->color() }}-100 text-{{ $order->status->color() }}-700">
+                     {{ $order->status->badgeClasses() }}">
             {{ $order->status->label() }}
         </span>
     </div>

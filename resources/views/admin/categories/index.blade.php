@@ -37,15 +37,28 @@
                             </span>
                         </td>
                         <td class="px-5 py-3 text-right">
-                            <form method="POST"
-                                  action="{{ route('admin.categories.toggle-active', $category) }}">
-                                @csrf
-                                @method('PATCH')
-                                <button type="submit"
-                                        class="text-xs {{ $category->is_active ? 'text-amber-500' : 'text-emerald-500' }} hover:underline">
-                                    {{ $category->is_active ? 'Ẩn' : 'Hiện' }}
-                                </button>
-                            </form>
+                            <div class="flex items-center justify-end gap-3">
+                                <a href="{{ route('admin.categories.edit', $category) }}"
+                                   class="text-xs text-blue-500 hover:underline">Sửa</a>
+                                
+                                <form method="POST"
+                                      action="{{ route('admin.categories.toggle-active', $category) }}">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit"
+                                            class="text-xs {{ $category->is_active ? 'text-amber-500' : 'text-emerald-500' }} hover:underline">
+                                        {{ $category->is_active ? 'Ẩn' : 'Hiện' }}
+                                    </button>
+                                </form>
+
+                                <form method="POST"
+                                      action="{{ route('admin.categories.destroy', $category) }}"
+                                      onsubmit="return confirm('Bạn có chắc muốn xoá danh mục này?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-xs text-red-500 hover:underline">Xoá</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 @endforeach

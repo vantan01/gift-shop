@@ -1,0 +1,37 @@
+services:
+
+  app:
+    image: php:8.2-fpm
+    container_name: gift_app
+    volumes:
+      - ./php:/var/www/html
+    # LỖI 1: không tách mạng → mạng phẳng
+
+  nginx:
+    image: nginx:alpine
+    container_name: gift_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./php:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    # LỖI 1: không tách mạng → mạng phẳng
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: gift_shop_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: gift_shop
+      POSTGRES_USER: gift_shop_user
+      POSTGRES_PASSWORD: secret123
+    ports:
+      - "5432:5432"   # LỖI 2: lộ database ra ngoài
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    # LỖI 3: không giới hạn RAM/CPU
+
+volumes:
+  postgres_data:

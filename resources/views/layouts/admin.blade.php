@@ -55,7 +55,7 @@
 
         {{-- Bottom: back to store + logout --}}
         <div class="px-3 py-4 border-t border-gray-100 space-y-0.5">
-            <a href="{{ route('dashboard') }}"
+            <a href="{{ route('home') }}"
                class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-gray-500
                       hover:bg-gray-50 transition-colors">
                 <span>🏪</span> Về cửa hàng

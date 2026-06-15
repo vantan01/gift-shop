@@ -119,6 +119,38 @@
     {{-- Sidebar options --}}
     <div class="space-y-5">
 
+        {{-- Image Upload --}}
+        <div class="bg-white rounded-2xl border border-gray-100 p-6" x-data="imagePreview()">
+            <h2 class="font-semibold text-gray-700 mb-4">Hình ảnh sản phẩm</h2>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-2">Ảnh chính</label>
+                    <div class="flex items-center justify-center w-full">
+                        <label class="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 relative overflow-hidden">
+                            <div class="flex flex-col items-center justify-center pt-5 pb-6" x-show="!imageUrl">
+                                <span class="text-3xl mb-2 text-gray-400">📸</span>
+                                <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Nhấn để tải lên</span></p>
+                                <p class="text-xs text-gray-500">PNG, JPG, WEBP (Tối đa 2MB)</p>
+                            </div>
+                            <img x-show="imageUrl" :src="imageUrl" class="absolute inset-0 w-full h-full object-cover" style="display: none;">
+                            <input type="file" name="image" class="hidden" accept="image/*" @change="fileChosen" />
+                        </label>
+                    </div>
+                    @error('image') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+                
+                {{-- Gallery --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-2">Thư viện ảnh</label>
+                    <input type="file" name="images[]" multiple accept="image/*"
+                           class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100">
+                    @error('images.*') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+            </div>
+        </div>
+
+
         <div class="bg-white rounded-2xl border border-gray-100 p-6">
             <h2 class="font-semibold text-gray-700 mb-4">Danh mục</h2>
             <select name="category_id"
@@ -192,4 +224,21 @@ document.getElementById('gen-slug')?.addEventListener('click', async () => {
     const data = await res.json();
     document.getElementById('product-slug').value = data.slug;
 });
+</script>
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('imagePreview', () => ({
+        imageUrl: '{{ $isEdit && $product->image ? Storage::url($product->image) : '' }}',
+        fileChosen(event) {
+            this.fileToDataUrl(event, src => this.imageUrl = src)
+        },
+        fileToDataUrl(event, callback) {
+            if (! event.target.files.length) return
+            let file = event.target.files[0]
+            let reader = new FileReader()
+            reader.readAsDataURL(file)
+            reader.onload = e => callback(e.target.result)
+        }
+    }))
+})
 </script>

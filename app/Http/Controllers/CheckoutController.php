@@ -51,6 +51,13 @@ class CheckoutController extends Controller
      */
     public function store(CheckoutRequest $request)
     {
+        $cartErrors = $this->cartService->validate();
+        if (! empty($cartErrors)) {
+            return redirect()
+                ->route('cart.index')
+                ->with('cart_error', implode(' ', $cartErrors));
+        }
+
         try {
             $order = $this->orderService->createFromCart($request, Auth::user());
 

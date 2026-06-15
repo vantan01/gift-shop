@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 // [Antigravity EDIT - Start] - Import DB facade
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 // [Antigravity EDIT - End]
 
 class ProductController extends Controller
@@ -57,10 +58,15 @@ class ProductController extends Controller
 
     public function store(StoreProductRequest $request)
     {
-        Product::create($request->validated() + [
+        $data = $request->validated() + [
             'is_active'   => $request->boolean('is_active', true),
             'is_featured' => $request->boolean('is_featured', false),
-        ]);
+        ];
+
+        $imagesData = $this->handleImageUpload($request);
+        $data = array_merge($data, $imagesData);
+
+        Product::create($data);
 
         return redirect()
             ->route('admin.products.index')
@@ -75,14 +81,43 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, Product $product)
     {
-        $product->update($request->validated() + [
+        $data = $request->validated() + [
             'is_active'   => $request->boolean('is_active', true),
             'is_featured' => $request->boolean('is_featured', false),
-        ]);
+        ];
+
+        $imagesData = $this->handleImageUpload($request, $product);
+        $data = array_merge($data, $imagesData);
+
+        $product->update($data);
 
         return redirect()
             ->route('admin.products.index')
             ->with('success', "Cập nhật \"{$product->name}\" thành công!");
+    }
+
+    /**
+     * Handle Image Upload
+     */
+    private function handleImageUpload(Request $request, Product $product = null)
+    {
+        $data = [];
+        if ($request->hasFile('image')) {
+            if ($product && $product->image) {
+                Storage::disk('public')->delete($product->image);
+            }
+            $data['image'] = $request->file('image')->store('products', 'public');
+        }
+
+        if ($request->hasFile('images')) {
+            $images = $product && is_array($product->images) ? $product->images : [];
+            foreach ($request->file('images') as $file) {
+                $images[] = $file->store('products', 'public');
+            }
+            $data['images'] = $images;
+        }
+
+        return $data;
     }
 
     /**
@@ -120,9 +155,9 @@ class ProductController extends Controller
     /**
      * Khôi phục soft deleted product
      */
-    public function restore(int $id)
+    public function restore(int $product)
     {
-        $product = Product::withTrashed()->findOrFail($id);
+        $product = Product::withTrashed()->findOrFail($product);
         $product->restore();
         return back()->with('success', "Đã khôi phục \"{$product->name}\".");
     }

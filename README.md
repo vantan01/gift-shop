@@ -130,10 +130,10 @@ Vào: **http://localhost:8000**
 
 ## 👤 Demo Accounts
 
-| Role | Email | Password |
-|------|-------|----------|
-| Admin | admin@giftshop.test | password123 |
-| Customer | customer@giftshop.test | password123 |
+| Role      | Email                  | Password    |
+|-----------|------------------------|-------------|
+| Admin     | admin@giftshop.test    | password123 |
+| Customer  | customer@giftshop.test | password123 |
 
 ---
 
@@ -161,15 +161,15 @@ vendor/bin/pest --verbose
 
 ### Test coverage
 
-| Test file | Nội dung |
-|-----------|----------|
-| `CatalogTest` | Product listing, filter, search, 404 cho inactive product |
-| `AuthTest` | Register, login, logout, password hashing |
-| `AuthorizationTest` | Customer bị chặn admin routes, guest bị chặn protected routes |
-| `CartTest` | Add/remove/update, stock validation, giá từ DB |
-| `CheckoutTest` | Transaction, snapshot, stock decrement, idempotency, validation |
-| `OrderSecurityTest` | IDOR protection, cancel rules, stock restore |
-| `AdminTest` | Product CRUD, order status update, phân quyền |
+| Test file             | Nội dung                                                          |
+|-----------------------|-------------------------------------------------------------------|
+| `CatalogTest`         | Product listing, filter, search, 404 cho inactive product         |
+| `AuthTest`            | Register, login, logout, password hashing                         |
+| `AuthorizationTest`   | Customer bị chặn admin routes, guest bị chặn protected routes     |
+| `CartTest`            | Add/remove/update, stock validation, giá từ DB                    |
+| `CheckoutTest`        | Transaction, snapshot, stock decrement, idempotency, validation   |
+| `OrderSecurityTest`   | IDOR protection, cancel rules, stock restore                      |
+| `AdminTest`           | Product CRUD, order status update, phân quyền                     |
 
 ---
 

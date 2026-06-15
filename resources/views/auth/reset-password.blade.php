@@ -1,39 +1,70 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('password.store') }}">
-        @csrf
+@extends('layouts.app')
 
-        <!-- Password Reset Token -->
-        <input type="hidden" name="token" value="{{ $request->route('token') }}">
+@section('title', 'Đặt lại mật khẩu')
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+@section('content')
+<div class="min-h-[70vh] flex items-center justify-center px-4 py-10">
+    <div class="w-full max-w-md">
+
+        <div class="text-center mb-8">
+            <span class="text-4xl">🔐</span>
+            <h1 class="text-2xl font-bold text-gray-800 mt-3">Đặt lại mật khẩu</h1>
+            <p class="text-gray-500 text-sm mt-1">Vui lòng nhập mật khẩu mới của bạn</p>
         </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <div class="bg-white rounded-2xl border border-pink-100 p-8">
+
+            <form method="POST" action="{{ route('password.store') }}">
+                @csrf
+
+                <!-- Password Reset Token -->
+                <input type="hidden" name="token" value="{{ $request->route('token') }}">
+
+                <div class="space-y-4">
+                    <!-- Email Address -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Email</label>
+                        <input type="email" name="email" value="{{ old('email', $request->email) }}" required autofocus autocomplete="username"
+                               class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm
+                                      focus:outline-none focus:ring-2 focus:ring-pink-300
+                                      @error('email') border-red-300 @enderror">
+                        @error('email')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Password -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Mật khẩu mới</label>
+                        <input type="password" name="password" required autocomplete="new-password"
+                               class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm
+                                      focus:outline-none focus:ring-2 focus:ring-pink-300
+                                      @error('password') border-red-300 @enderror">
+                        @error('password')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Xác nhận mật khẩu</label>
+                        <input type="password" name="password_confirmation" required autocomplete="new-password"
+                               class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm
+                                      focus:outline-none focus:ring-2 focus:ring-pink-300
+                                      @error('password_confirmation') border-red-300 @enderror">
+                        @error('password_confirmation')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <button type="submit"
+                        class="w-full mt-6 bg-pink-500 hover:bg-pink-600 text-white font-semibold
+                               py-3 rounded-full transition-colors">
+                    Lưu mật khẩu mới
+                </button>
+            </form>
         </div>
-
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                                type="password"
-                                name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Reset Password') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+    </div>
+</div>
+@endsection

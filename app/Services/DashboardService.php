@@ -43,11 +43,27 @@ class DashboardService
 
     public function getTopProducts(int $limit = 5): \Illuminate\Support\Collection
     {
-        return OrderItem::select('product_name', 'product_id',
-                                  DB::raw('SUM(quantity) as total_sold'),
-                                  DB::raw('SUM(subtotal) as total_revenue'))
-            ->groupBy('product_name', 'product_id')
+        return OrderItem::query()
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->where('orders.status', '!=', OrderStatus::CANCELLED->value)
+            ->select(
+                'order_items.product_name',
+                'order_items.product_id',
+                DB::raw('SUM(order_items.quantity) as total_sold'),
+                DB::raw('SUM(order_items.subtotal) as total_revenue')
+            )
+            ->groupBy('order_items.product_name', 'order_items.product_id')
             ->orderByDesc('total_sold')
+            ->limit($limit)
+            ->get();
+    }
+
+    public function getLowStockProducts(int $limit = 5): \Illuminate\Support\Collection
+    {
+        return Product::active()
+            ->whereColumn('stock', '<=', 'low_stock_threshold')
+            ->where('stock', '>', 0)
+            ->orderBy('stock')
             ->limit($limit)
             ->get();
     }

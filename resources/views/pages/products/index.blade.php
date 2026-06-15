@@ -33,7 +33,7 @@
                     </li>
                     @foreach ($categories as $cat)
                         <li>
-                            <a href="/products?{{ http_build_query(array_merge(request()->except(['category', 'page']), ['category' => $cat->slug])) }}"
+                            <a href="{{ route('categories.show', $cat) }}"
                                class="block text-sm px-3 py-1.5 rounded-lg transition-colors
                                       {{ $currentCategory?->slug === $cat->slug ? 'bg-pink-100 text-pink-600 font-medium' : 'text-gray-600 hover:text-pink-500' }}">
                                 {{ $cat->name }}

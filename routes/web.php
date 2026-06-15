@@ -8,13 +8,17 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AccountController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\CategoryController;
+
 // Public routes
-Route::get('/', [HomeController::class, 'index'])->name('dashboard');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::prefix('products')->name('products.')->group(function () {
     Route::get('/',        [ProductController::class, 'index'])->name('index');
     Route::get('/{slug}',  [ProductController::class, 'show'])->name('show');
 });
+
+Route::get('/categories/{category:slug}', [CategoryController::class, 'show'])->name('categories.show');
 
 // Cart — không cần login
 Route::prefix('cart')->name('cart.')->group(function () {
@@ -65,7 +69,7 @@ Route::middleware(['auth', 'admin'])
         Route::put('/{product}',     [\App\Http\Controllers\Admin\ProductController::class, 'update'])->name('update');
         Route::patch('/{product}/toggle-active', [\App\Http\Controllers\Admin\ProductController::class, 'toggleActive'])->name('toggle-active');
         Route::delete('/{product}',  [\App\Http\Controllers\Admin\ProductController::class, 'destroy'])->name('destroy');
-        Route::post('/{id}/restore', [\App\Http\Controllers\Admin\ProductController::class, 'restore'])->name('restore');
+        Route::post('/{product}/restore', [\App\Http\Controllers\Admin\ProductController::class, 'restore'])->name('restore');
         Route::post('/generate-slug',[\App\Http\Controllers\Admin\ProductController::class, 'generateSlug'])->name('generate-slug');
     });
 
@@ -73,6 +77,9 @@ Route::middleware(['auth', 'admin'])
     Route::prefix('categories')->name('categories.')->group(function () {
         Route::get('/',                          [\App\Http\Controllers\Admin\CategoryController::class, 'index'])->name('index');
         Route::post('/',                         [\App\Http\Controllers\Admin\CategoryController::class, 'store'])->name('store');
+        Route::get('/{category}/edit',           [\App\Http\Controllers\Admin\CategoryController::class, 'edit'])->name('edit');
+        Route::put('/{category}',                [\App\Http\Controllers\Admin\CategoryController::class, 'update'])->name('update');
+        Route::delete('/{category}',             [\App\Http\Controllers\Admin\CategoryController::class, 'destroy'])->name('destroy');
         Route::patch('/{category}/toggle-active',[\App\Http\Controllers\Admin\CategoryController::class, 'toggleActive'])->name('toggle-active');
     });
 

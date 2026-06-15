@@ -11,10 +11,18 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $stats         = $this->dashboardService->getStats();
-        $topProducts   = $this->dashboardService->getTopProducts();
-        $recentOrders  = $this->dashboardService->getRecentOrders();
+        $stats            = $this->dashboardService->getStats();
+        $topProducts      = $this->dashboardService->getTopProducts();
+        $recentOrders     = $this->dashboardService->getRecentOrders();
+        $revenueByMonth   = $this->dashboardService->getRevenueByMonth();
+        $lowStockProducts = $this->dashboardService->getLowStockProducts();
 
-        return view('admin.dashboard', compact('stats', 'topProducts', 'recentOrders'));
+        return view('admin.dashboard', compact(
+            'stats',
+            'topProducts',
+            'recentOrders',
+            'revenueByMonth',
+            'lowStockProducts',
+        ));
     }
 }

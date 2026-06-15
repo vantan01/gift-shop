@@ -5,7 +5,7 @@
 @section('breadcrumb', 'Admin › Sản phẩm › Sửa')
 
 @section('content')
-<form method="POST" action="{{ route('admin.products.update', $product) }}">
+<form method="POST" action="{{ route('admin.products.update', $product) }}" enctype="multipart/form-data">
     @csrf
     @method('PUT')
     @include('admin.products._form')

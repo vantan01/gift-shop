@@ -24,9 +24,9 @@
             {{-- Product Image --}}
             <div class="aspect-square bg-pink-50 rounded-xl overflow-hidden flex items-center justify-center">
                 @if ($product->image)
-                <img src="{{ $product->image }}"
-                    alt="{{ $product->name }}"
-                    class="w-full h-full object-cover">
+                <img src="{{ Str::startsWith($product->image, 'http') ? $product->image : Storage::url($product->image) }}"
+                     alt="{{ $product->name }}"
+                     class="w-full h-full object-cover">
                 @else
                 <div class="text-8xl">
                     @switch($product->category->slug)

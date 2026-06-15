@@ -1,4 +1,32 @@
 services:
+
+  app:
+    image: php:8.2-fpm
+    container_name: gift_app
+    volumes:
+      - ./php:/var/www/html
+    networks:
+      - frontend_net
+      - backend_net
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 128M        # SỬA LỖI 3: giới hạn RAM/CPU
+
+  nginx:
+    image: nginx:alpine
+    container_name: gift_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./php:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - frontend_net          # SỬA LỖI 1: chỉ ở frontend, không thấy db
+
   postgres:
     image: postgres:16-alpine
     container_name: gift_shop_db
@@ -7,10 +35,20 @@ services:
       POSTGRES_DB: gift_shop
       POSTGRES_USER: gift_shop_user
       POSTGRES_PASSWORD: secret123
-    ports:
-      - "5432:5432"
+    # SỬA LỖI 2: xóa ports → db không lộ ra ngoài
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend_net           # SỬA LỖI 1: chỉ ở backend, nginx không thấy
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M        # SỬA LỖI 3: giới hạn RAM/CPU
 
 volumes:
   postgres_data:
+
+networks:
+  frontend_net:
+  backend_net:

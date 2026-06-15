@@ -66,8 +66,7 @@
                     </td>
                     <td class="px-5 py-3 text-center">
                         <span class="inline-block text-xs font-semibold px-2 py-0.5 rounded-full
-                                     bg-{{ $order->status->color() }}-100
-                                     text-{{ $order->status->color() }}-700">
+                                     {{ $order->status->badgeClasses() }}">
                             {{ $order->status->label() }}
                         </span>
                     </td>

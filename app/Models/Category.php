@@ -33,4 +33,17 @@ class Category extends Model
     {
         return $query->where('is_active', true);
     }
+
+    public function emoji(): string
+    {
+        return match ($this->slug) {
+            'thu-bong'  => '🧸',
+            'hoa-sap'   => '🌸',
+            'hop-qua'   => '🎁',
+            'chocolate' => '🍫',
+            'nen-thom'  => '🕯️',
+            'thiep'     => '💌',
+            default     => '🎀',
+        };
+    }
 }
