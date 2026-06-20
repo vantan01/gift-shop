@@ -5,8 +5,9 @@ services:
     container_name: gift_app
     volumes:
       - ./php:/var/www/html
-    # LỖI 1: không tách mạng → mạng phẳng
-
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+    - "9001:9000"
   nginx:
     image: nginx:alpine
     container_name: gift_nginx
@@ -28,10 +29,10 @@ services:
       POSTGRES_USER: gift_shop_user
       POSTGRES_PASSWORD: secret123
     ports:
-      - "5432:5432"   # LỖI 2: lộ database ra ngoài
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    # LỖI 3: không giới hạn RAM/CPU
+
 
 volumes:
   postgres_data:
