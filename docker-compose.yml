@@ -1,5 +1,4 @@
 services:
-
   app:
     build:
       context: .
@@ -67,3 +66,4 @@ volumes:
 networks:
   frontend_net:
   backend_net:
+  

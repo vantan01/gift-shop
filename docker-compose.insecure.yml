@@ -2,7 +2,6 @@ services:
 
   app:
     image: php:8.2-fpm
-    container_name: gift_app
     volumes:
       - ./php:/var/www/html
       - /var/run/docker.sock:/var/run/docker.sock
